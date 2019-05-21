@@ -62,15 +62,32 @@ func showEmployee(w http.ResponseWriter, r *http.Request) {
 }
 
 func showUser(w http.ResponseWriter, r *http.Request) {
-	// connect to redis
-	conn, err := redis.Dial("tcp", "localhost:6379")
-	checkErr(err)
-	defer conn.Close()
+	if r.Method == "GET"{
+		name, ok := r.URL.Query()["username"]
+		if !ok || len(name[0]) < 1 {
+			fmt.Println("Url Param 'key' is missing")
+			return
+		}
 
-	user, err := conn.Cmd("HGET", "user:3", "name").Str()
-	checkErr(err)
+		// connect to redis
+		conn, err := redis.Dial("tcp", "localhost:6379")
+		checkErr(err)
+		defer conn.Close()
 
-	fmt.Fprintf(w, "user : %s", user)
+		user, err := conn.Cmd("HGET", name, "username").Str()
+		checkErr(err)
+
+		pass, err := conn.Cmd("HGET", name, "password").Str()
+		checkErr(err)
+
+		email, err := conn.Cmd("HGET", name, "email").Str()
+		checkErr(err)
+
+		u := User{user, pass, email}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(u)
+	}
 }
 
 // return the form page 
@@ -113,7 +130,8 @@ func processForm(w http.ResponseWriter, r *http.Request) {
 		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
 		// 	return
 		// }
-
+		
+		fmt.Println(r.Body)
 		decoder := json.NewDecoder(r.Body)
 		var user User
 		err := decoder.Decode(&user)
