@@ -1,0 +1,48 @@
+{{define "result"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Show Message</title>
+    </head>
+    <body>
+        <h2>Registrasi Sukses</h2>
+        <p>username : {{.username}}</p>
+        <a href="/registrasi">
+          <button>Back</button>
+        </a>
+    </body>
+</html>
+{{end}}
+
+{{define "form"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FORM REGISTRASI</title>
+    </head>
+    <body>
+      <h2>FORM REGISTRASI</h2>
+      <form method="post" action="/submit">
+        <div class="col-sm-6">
+            <label>Username :</label>
+        </div>
+        <input type="text" placeholder="Type name here" name="username" required />
+        <br/>
+
+        <div class="col-sm-6">
+          <label>Password :</label>
+        </div>
+        <input type="password" placeholder="Type password here" name="password" required />
+        <br/>
+
+        <div class="col-sm-6">
+          <label>Email :</label>
+        </div>
+        <input type="text" placeholder="Type Email here" name="email" required />
+        <br/>
+
+          <button type="submit">Submit</button>
+      </form>
+    </body>
+</html>
+{{end}}
