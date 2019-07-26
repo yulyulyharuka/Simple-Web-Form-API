@@ -1,4 +1,4 @@
-module "github.com/yulyulyharuka/Simple-Web-Form-API\n"
+module github.com/yulyulyharuka/Simple-Web-Form-API
 
 go 1.12
 
