@@ -11,16 +11,7 @@ import (
 	pq "github.com/lib/pq"
 	"github.com/mediocregopher/radix.v2/redis"
 	iconv "github.com/djimenez/iconv-go"
-	// "golang.org/x/net/html/charset"
-	// "golang.org/x/text/encoding"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "password"
-	dbname   = "customer"
+	utils "github.com/yulyulyharuka/Simple-Web-Form-API/utils"
 )
 
 type User struct{
@@ -39,10 +30,6 @@ func checkErr(err error) {
 	}
 }
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-}
-
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello %s\n", r.URL.Path[1:])
 }
@@ -51,7 +38,7 @@ func showEmployee(w http.ResponseWriter, r *http.Request) {
 	// connect to postgres database
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+		utils.getEnv("DB_HOST"), utils.getEnv("DB_PORT"), utils.getEnv("DB_USER"), utils.getEnv("DB_PASSWORD"), utils.getEnv("DB_NAME"))
 
 	db, err := sql.Open("postgres", psqlInfo)
 	checkErr(err)
@@ -105,7 +92,7 @@ func showUser(w http.ResponseWriter, r *http.Request) {
 
 // to process the data from form
 func processForm(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	utils.enableCors(&w)
 	// connect to postgres database
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",

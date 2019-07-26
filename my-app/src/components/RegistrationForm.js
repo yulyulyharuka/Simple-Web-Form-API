@@ -3,6 +3,11 @@ import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
+
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 
 const cardStyles = {
     width: '80%',
@@ -16,16 +21,25 @@ class RegistrationForm extends Component {
         this.state = { 
             username: '',
             email: '',
-            password: '' 
+            password: '', 
+            selectedDate: new Date()
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleChangeDate = this.handleChangeDate.bind(this)
     }
 
     handleChange(event) { 
         this.setState({ 
             [event.target.name]: event.target.value
         })
+    }
+
+    handleChangeDate(date) {
+      this.setState({
+        selectedDate: date
+      });
+      console.log(this.state.selectedDate)
     }
 
     handleSubmit(event) {
@@ -44,6 +58,7 @@ class RegistrationForm extends Component {
     }
 
     render() {
+        const { selectedDate } = this.state;
         return (
             <Card bg="light" border="dark" style={cardStyles}>
               <Card.Header>Registration Here!</Card.Header>
@@ -72,15 +87,28 @@ class RegistrationForm extends Component {
                             onChange={this.handleChange}
                         />
                     </Form.Group>
-                      <Form.Group controlId="formBasicChecbox">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control 
-                          type="password" 
-                          name="password"
-                          placeholder="Password" 
-                          value={this.state.password}
-                          onChange={this.handleChange}/>
-                      </Form.Group>
+
+                    <Form.Group controlId="formBasicChecbox">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control 
+                        type="password" 
+                        name="password"
+                        placeholder="Password" 
+                        value={this.state.password}
+                        onChange={this.handleChange}/>
+                    </Form.Group>
+
+                    <DatePicker
+                      selected={this.state.selectedDate}
+                      onChange={this.handleChangeDate}
+                    />
+
+                    <div>
+                      {selectedDate && <p>Day: {selectedDate.getMonth()}</p>}
+                      {!selectedDate}
+                      <DayPickerInput onDayChange={this.handleChangeDate} />
+                    </div>
+
                     <Button variant="primary" type="submit">
                       Submit
                     </Button>

@@ -8,7 +8,7 @@ import RegistrationForm from './components/RegistrationForm'
 import UploadFile from './components/UploadFile'
 import UploadCSV from './components/UploadCSV'
 import TransferForm from './components/TransferForm'
-
+import DataTable from './components/DataTable'
 const HeaderWithRouter = withRouter(Header)
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
           <Route path="/uploadFile" component={UploadFile}/>
           <Route path="/uploadCSV" component={UploadCSV}/>
           <Route path="/transfer" component={TransferForm}/>
+          <DataTable />
         </Fragment>
       </Router>
     </div>
