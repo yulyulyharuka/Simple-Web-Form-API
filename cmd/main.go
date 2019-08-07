@@ -10,7 +10,6 @@ import (
 	"encoding/csv"
 	pq "github.com/lib/pq"
 	"github.com/mediocregopher/radix.v2/redis"
-	iconv "github.com/djimenez/iconv-go"
 	utils "github.com/yulyulyharuka/Simple-Web-Form-API/utils"
 )
 
@@ -38,7 +37,7 @@ func showEmployee(w http.ResponseWriter, r *http.Request) {
 	// connect to postgres database
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		utils.getEnv("DB_HOST"), utils.getEnv("DB_PORT"), utils.getEnv("DB_USER"), utils.getEnv("DB_PASSWORD"), utils.getEnv("DB_NAME"))
+		utils.GetEnv("DB_HOST"), utils.GetEnv("DB_PORT"), utils.GetEnv("DB_USER"), utils.GetEnv("DB_PASSWORD"), utils.GetEnv("DB_NAME"))
 
 	db, err := sql.Open("postgres", psqlInfo)
 	checkErr(err)
@@ -92,11 +91,11 @@ func showUser(w http.ResponseWriter, r *http.Request) {
 
 // to process the data from form
 func processForm(w http.ResponseWriter, r *http.Request) {
-	utils.enableCors(&w)
+	utils.EnableCors(&w)
 	// connect to postgres database
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+		utils.GetEnv("DB_HOST"), utils.GetEnv("DB_PORT"), utils.GetEnv("DB_USER"), utils.GetEnv("DB_PASSWORD"), utils.GetEnv("DB_NAME"))
 
 	db, err := sql.Open("postgres", psqlInfo)
 	checkErr(err)
@@ -149,7 +148,7 @@ func processForm(w http.ResponseWriter, r *http.Request) {
 
 // uploadFile used to read and parse the csv file 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	utils.EnableCors(&w)
 	if r.Method != "POST" {
         http.Error(w, "", http.StatusBadRequest)
         return
@@ -185,7 +184,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 	// connect to postgres database
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+		utils.GetEnv("DB_HOST"), utils.GetEnv("DB_PORT"), utils.GetEnv("DB_USER"), utils.GetEnv("DB_PASSWORD"), utils.GetEnv("DB_NAME"))
 
 	db, err := sql.Open("postgres", psqlInfo)
 	checkErr(err)
@@ -210,13 +209,13 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		}
 		
 		fmt.Println(line)
-		var data []string
-		for _, value := range line {
-			output,_ := iconv.ConvertString(value, "ASCII", "utf-8")
-			data = append(data,output)
-		}
+		// var data []string
+		// for _, value := range line {
+		// 	output,_ := iconv.ConvertString(value, "ASCII", "utf-8")
+		// 	data = append(data,output)
+		// }
 
-		datas = append(datas, data)
+		datas = append(datas, line)
 	}
 
 	txn, err := db.Begin()

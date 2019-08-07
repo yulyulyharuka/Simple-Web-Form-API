@@ -3,12 +3,14 @@ package utils
 import (
 	"os"
 	"net/http"
+	"github.com/joho/godotenv"
 )
 
-func getEnv(varName string) (string) {
+func GetEnv(varName string) (string) {
+	godotenv.Load()
 	return (os.Getenv(varName))
 }
 
-func enableCors(w *http.ResponseWriter) {
+func EnableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 }
